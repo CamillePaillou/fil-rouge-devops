@@ -19,16 +19,17 @@ export function createApp() {
     res.json([...taches.values()]);
   });
 
-  app.post("/tasks", (req, res) => {
-    const titre = req.body?.titre;
-    if (typeof titre !== "string" || titre.trim() === "") {
-      res.status(400).json({ erreur: "titre requis" });
-      return;
-    }
-    const tache = { id: prochainId++, titre: titre.trim(), faite: false };
-    taches.set(tache.id, tache);
-    res.status(201).json(tache);
-  });
+app.post("/tasks", (req, res) => {
+  const titre = req.body?.titre;
+  if (typeof titre !== "string" || titre.trim() === "") {
+    res.status(400).json({ erreur: "titre requis" });
+    return;
+  }
+  const priorité = req.body?.priorité === "haute" ? "haute" : "normale";
+  const tache = { id: prochainId++, titre: titre.trim(), priorité, faite: false };
+  taches.set(tache.id, tache);
+  res.status(201).json(tache);
+});
 
   app.get("/tasks/:id", (req, res) => {
     const tache = taches.get(Number(req.params.id));
